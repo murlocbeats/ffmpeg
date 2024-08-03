@@ -14,9 +14,10 @@ def edit_video():
     height = 360
 
     if os.path.exists(input_path) and os.access(input_path, os.R_OK):
+        ffmpeg_path = './bin/ffmpeg'
         # اجرای فرمان ffmpeg برای ویرایش ویدئو
         command = [
-            'ffmpeg',
+            ffmpeg_path,
             '-y',
             '-i', input_path,
             '-ss', start_time,
