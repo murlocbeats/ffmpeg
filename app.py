@@ -10,8 +10,8 @@ def edit_video():
     output_path = 'edited_video.mp4'
     start_time = '00:00:00'
     duration = '00:00:10'
-    width = 1920
-    height = 1080
+    width = 360
+    height = 360
 
     if os.path.exists(input_path) and os.access(input_path, os.R_OK):
         # اجرای فرمان ffmpeg برای ویرایش ویدئو
