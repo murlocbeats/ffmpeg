@@ -1,10 +1,15 @@
+from flask import Flask
 import os
 
-# مسیر فایل ویدیویی
-video_path = 'video.mp4'
+app = Flask(__name__)
 
-# بررسی وجود و دسترسی به فایل
-if os.path.exists(video_path) and os.access(video_path, os.R_OK):
-    print("فایل با موفقیت قابل خواندن است.")
-else:
-    print("فایل قابل خواندن نیست.")
+@app.route('/')
+def check_file():
+    video_path = 'video.mp4'
+    if os.path.exists(video_path) and os.access(video_path, os.R_OK):
+        return "فایل با موفقیت قابل خواندن است."
+    else:
+        return "فایل قابل خواندن نیست."
+
+if __name__ == '__main__':
+    app.run()
