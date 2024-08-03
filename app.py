@@ -1,4 +1,3 @@
-'''
 from flask import Flask, send_file, abort
 import subprocess
 import os
@@ -15,10 +14,9 @@ def edit_video():
     height = 360
 
     if os.path.exists(input_path) and os.access(input_path, os.R_OK):
-        ffmpeg_path = os.getenv('FFMPEG_PATH', 'ffmpeg')
         # اجرای فرمان ffmpeg برای ویرایش ویدئو
         command = [
-            ffmpeg_path,
+            'ffmpeg',
             '-y',
             '-i', input_path,
             '-ss', start_time,
@@ -39,42 +37,3 @@ def edit_video():
 
 if __name__ == '__main__':
     app.run()
-'''
-
-import os
-import tempfile
-from flask import Flask, request, send_file
-import subprocess
-
-app = Flask(__name__)
-
-# Define paths to binaries
-FFMPEG_PATH = './bin/ffmpeg'
-VIDEO_FILE = 'video.mp4'
-
-@app.route('/process', methods=['GET'])
-def process_video():
-    # Create a temporary file to store the output
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as temp_output_file:
-        temp_output_file_path = temp_output_file.name
-    
-    # Define the command to cut the first 10 seconds and resize the video
-    command = [
-        FFMPEG_PATH,
-        '-i', VIDEO_FILE,
-        '-ss', '00:00:00',
-        '-t', '00:00:10',
-        '-vf', 'scale=360:360',
-        temp_output_file_path
-    ]
-    
-    # Run the command
-    try:
-        subprocess.run(command, check=True)
-        # Return the processed video file
-        return send_file(temp_output_file_path, as_attachment=True)
-    except Exception as e:
-        return str(e), 500
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
