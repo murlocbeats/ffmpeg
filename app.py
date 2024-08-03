@@ -41,18 +41,23 @@ if __name__ == '__main__':
     app.run()
 '''
 
+import os
+import tempfile
 from flask import Flask, request, send_file
 import subprocess
-import os
 
 app = Flask(__name__)
 
+# Define paths to binaries
 FFMPEG_PATH = './bin/ffmpeg'
 VIDEO_FILE = 'video.mp4'
-OUTPUT_FILE = 'output.mp4'
 
 @app.route('/process', methods=['GET'])
 def process_video():
+    # Create a temporary file to store the output
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as temp_output_file:
+        temp_output_file_path = temp_output_file.name
+    
     # Define the command to cut the first 10 seconds and resize the video
     command = [
         FFMPEG_PATH,
@@ -60,14 +65,16 @@ def process_video():
         '-ss', '00:00:00',
         '-t', '00:00:10',
         '-vf', 'scale=360:360',
-        OUTPUT_FILE
+        temp_output_file_path
     ]
     
     # Run the command
-    subprocess.run(command, check=True)
-    
-    # Return the processed video file
-    return send_file(OUTPUT_FILE, as_attachment=True)
+    try:
+        subprocess.run(command, check=True)
+        # Return the processed video file
+        return send_file(temp_output_file_path, as_attachment=True)
+    except Exception as e:
+        return str(e), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
