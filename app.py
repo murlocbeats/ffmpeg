@@ -47,7 +47,7 @@ import os
 
 app = Flask(__name__)
 
-FFMPEG_PATH = 'bin/ffmpeg'
+FFMPEG_PATH = './bin/ffmpeg'
 VIDEO_FILE = 'video.mp4'
 OUTPUT_FILE = 'output.mp4'
 
