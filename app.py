@@ -1,16 +1,10 @@
 import os
 
-# نام فایل
-file_path = "example.txt"
+# مسیر فایل ویدیویی
+video_path = 'video.mp4'
 
-# متنی که می‌خواهیم بنویسیم
-content = "این یک متن ساده است."
-
-# بررسی اینکه آیا فایل وجود دارد یا خیر
-if not os.path.exists(file_path):
-    # ایجاد و نوشتن در فایل
-    with open(file_path, "w") as file:
-        file.write(content)
-    print(f"فایل '{file_path}' ایجاد شد و متن در آن نوشته شد.")
+# بررسی وجود و دسترسی به فایل
+if os.path.exists(video_path) and os.access(video_path, os.R_OK):
+    print("فایل با موفقیت قابل خواندن است.")
 else:
-    print(f"فایل '{file_path}' از قبل وجود دارد.")
+    print("فایل قابل خواندن نیست.")
